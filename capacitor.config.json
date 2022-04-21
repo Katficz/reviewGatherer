@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "reviewGatherer",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
