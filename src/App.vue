@@ -9,6 +9,10 @@
         </ion-header>
         <ion-content>
           <ion-list id="inbox-list">
+            <ion-item color="warning" lines="none" v-if="unsavedDataExists">
+              <ion-label>Niezapisane dane!</ion-label>
+              <ion-button @click="saveStoredData">Spróbuj zapisać</ion-button>
+            </ion-item>
             <ion-menu-toggle
               auto-hide="false"
               v-for="(p, i) in appPages"
@@ -54,12 +58,14 @@ import {
   IonToolbar,
   IonHeader,
   IonTitle,
+  IonButton,
 } from '@ionic/vue'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { listOutline, addOutline } from 'ionicons/icons'
 import { Network } from '@capacitor/network'
 import { saveStoredReviews } from './hooks/localStorageManagment'
+import { useMiscStore } from './store/misc'
 
 export default defineComponent({
   name: 'App',
@@ -77,6 +83,7 @@ export default defineComponent({
     IonMenuToggle,
     IonRouterOutlet,
     IonSplitPane,
+    IonButton,
   },
   setup() {
     const selectedIndex = ref(0)
@@ -84,6 +91,10 @@ export default defineComponent({
       if (!status.connected) return
       await saveStoredReviews()
     })
+    useMiscStore().checkUnsavedDataExists()
+    async function saveStoredData() {
+      await saveStoredReviews()
+    }
     const appPages = [
       {
         title: 'Lista ankiet',
@@ -113,7 +124,9 @@ export default defineComponent({
       selectedIndex,
       appPages,
       labels,
+      unsavedDataExists: computed(() => useMiscStore().getIsUnsavedData),
       isSelected: (url: string) => (url === route.path ? 'selected' : ''),
+      saveStoredData,
     }
   },
 })

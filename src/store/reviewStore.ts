@@ -1,4 +1,4 @@
-import { fetchPost } from '@/hooks/fetchMethods'
+import { fetchGet, fetchPost } from '@/hooks/fetchMethods'
 import { defineStore } from 'pinia'
 import { Network } from '@capacitor/network'
 import { presentAlertOk } from '@/hooks/ionicAlerts'
@@ -74,20 +74,24 @@ export const useReviewStore = defineStore('ReviewStore', {
   },
   actions: {
     async saveNewReview(review: Review) {
-      //https://developer.mozilla.org/en-US/docs/web/api/navigator/online <sad face>
-      //managing if using app on browser
-      if (Capacitor.getPlatform() == 'web' && !window.navigator.onLine) {
-        // on webApp capacitorNetwork is not working well
-        await presentAlertOk(
-          'Whoops! Brak połączenia z internetem.',
-          'Przywróć połączenie z internetem by zapisać ankietę, lub pobierz aplikację na telefon, by móc pracować offline.'
-        )
+      if (Capacitor.getPlatform() == 'web') {
+        // in browser capacitorNetwork is not working well
+        const response = await fetchPost('backendUrlToSaveOne', review)
+        if (!response) {
+          await presentAlertOk(
+            'Whoops! Brak połączenia z internetem.',
+            'Ankieta została zapisana w pamięci przeglądarki. Pobierz aplikację na telefon, by móc pracować bez ryzyka utraty danych.'
+          )
+          await storeNewReview(review)
+          return
+        }
+        this.$state.reviewList.push(review)
         return
       }
       //app on android/ios
       const isConnected = await Network.getStatus()
 
-      if (!isConnected.connected && Capacitor.getPlatform() != 'web') {
+      if (!isConnected.connected) {
         await presentAlertOk(
           'Whoops! Brak połączenia z internetem.',
           'Ankieta zostanie przechowana w pamięci i zostanie wysłana gdy ponownie połączysz się z internetem!'
@@ -98,6 +102,16 @@ export const useReviewStore = defineStore('ReviewStore', {
       const response = await fetchPost('backendUrlToSaveOne', review)
       if (!response) return
       this.$state.reviewList.push(review)
+    },
+    async loadReviewList(filter: {
+      name: string
+      surname: string
+      pesel: number | undefined
+    }) {
+      const reviewList: Review[] = await fetchGet(
+        `getListUrl?name=${filter.name}&surname=${filter.surname}&pesel=${filter.pesel}`
+      )
+      this.reviewList = reviewList
     },
   },
 })

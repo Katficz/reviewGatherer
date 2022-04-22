@@ -20,6 +20,8 @@
       <ion-item>
         <ion-label position="floating">Pesel</ion-label>
         <ion-input
+          pattern="/^[0-9]{11}$/g"
+          inputmode="numeric"
           type="number"
           :value="pesel"
           @input="$emit('update:pesel', Number($event.target.value))"
@@ -44,6 +46,7 @@
       <ion-item>
         <ion-label position="floating">Kod pocztowy</ion-label>
         <ion-input
+          inputmode="tel"
           type="tel"
           :value="zipCode"
           @input="$emit('update:zipCode', $event.target.value)"
@@ -52,6 +55,7 @@
       <ion-item>
         <ion-label position="floating">Numer telefonu</ion-label>
         <ion-input
+          inputmode="tel"
           type="tel"
           :value="phoneNum"
           @input="$emit('update:phoneNum', $event.target.value)"

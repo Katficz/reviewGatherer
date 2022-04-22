@@ -54,7 +54,7 @@ export default defineComponent({
   }
 }
 .main-card {
-  background-color: rgba(1, 45, 87, 0.089);
+  background-color: rgba(1, 45, 87, 0.015);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   min-height: 100%;

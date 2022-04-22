@@ -1,3 +1,4 @@
+import { useMiscStore } from '@/store/misc'
 import { Review } from '@/store/reviewStore'
 import { Network } from '@capacitor/network'
 import { Storage } from '@capacitor/storage'
@@ -16,6 +17,8 @@ export async function storeNewReview(review: Review) {
     key: 'storedReviews',
     value: jsonReviewsToStore,
   })
+  console.log(jsonReviewsToStore)
+  await useMiscStore().checkUnsavedDataExists()
 }
 
 export async function saveStoredReviews() {
@@ -30,6 +33,12 @@ export async function saveStoredReviews() {
     //THIS WOULD NEED BETTER ERROR HANDLING HERE
     if (!response) return false
     await Storage.remove({ key: 'storedReviews' })
+    await useMiscStore().checkUnsavedDataExists()
     return true
   } else return false
+}
+
+export async function unsavedDataExists() {
+  const { value } = await Storage.get({ key: 'storedReviews' })
+  return !!value
 }
