@@ -12,7 +12,6 @@ export async function presentAlertConfirm(
   }
 ) {
   const alert = await alertController.create({
-    cssClass: 'my-custom-class',
     header: header,
     subHeader: subheader,
     message: message,
@@ -46,7 +45,6 @@ export async function presentAlertOk(
   }
 ) {
   const alert = await alertController.create({
-    cssClass: 'my-custom-class',
     header: header,
     subHeader: subheader,
     message: message,

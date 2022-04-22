@@ -5,6 +5,7 @@
         open
         v-model:name="newReview.personalData.name"
         v-model:surname="newReview.personalData.surname"
+        v-model:pesel="newReview.personalData.pesel"
         v-model:address="newReview.personalData.address"
         v-model:city="newReview.personalData.city"
         v-model:zipCode="newReview.personalData.zipCode"
@@ -19,7 +20,10 @@
         v-model:changeSuggestions="newReview.answers.changeSuggestions"
       >
       </questions-form>
-      <accept-reject-buttons type="submit"></accept-reject-buttons>
+      <accept-reject-buttons
+        type="submit"
+        @rejected="clearReview"
+      ></accept-reject-buttons>
     </form>
   </div>
 </template>
@@ -35,7 +39,7 @@ import QuestionsForm from '@/components/design/organisms/QuestionsForm.vue'
 import { emptyReview, Review } from '@/store/reviewStore'
 //misc
 import { validatePersonalInfo } from '@/hooks/validateFunctions'
-import { presentAlertOk } from '@/hooks/ionicAlerts'
+import { presentAlertConfirm, presentAlertOk } from '@/hooks/ionicAlerts'
 
 export default defineComponent({
   components: {
@@ -59,9 +63,19 @@ export default defineComponent({
       }
       emit('saveNewReview', newReview.value)
     }
+
+    async function clearReview() {
+      const alertChoice = await presentAlertConfirm(
+        'Czy na pewno chcesz odrzucić ten formularz?',
+        'Spowoduje to wyczyszczenie wszystkich pól w formularzu.'
+      )
+      if (!alertChoice) return
+      newReview.value = emptyReview()
+    }
     return {
       newReview,
       emitSaveReview,
+      clearReview,
     }
   },
 })

@@ -10,5 +10,10 @@ export function validatePersonalInfo(personalData: PersonalData) {
     !isValidPhoneNumber(personalData.phoneNum, 'PL')
   )
     return 'Niepoprawny numer telefonu!'
+  if (
+    !isNaN(personalData.pesel) &&
+    !personalData.pesel.toString().match(/^[0-9]{11}$/g)
+  )
+    return 'Numer PESEL nieprawidłowy'
   return true
 }

@@ -18,6 +18,14 @@
         ></ion-input>
       </ion-item>
       <ion-item>
+        <ion-label position="floating">Pesel</ion-label>
+        <ion-input
+          type="number"
+          :value="pesel"
+          @input="$emit('update:pesel', Number($event.target.value))"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label position="floating"
           >Adres - ulica oraz numer domu/mieszkania</ion-label
         >
@@ -67,6 +75,9 @@ export default defineComponent({
     surname: {
       type: String,
     },
+    pesel: {
+      type: Number,
+    },
     address: {
       type: String,
     },
@@ -83,6 +94,7 @@ export default defineComponent({
   emits: [
     'update:name',
     'update:surname',
+    'update:pesel',
     'update:address',
     'update:city',
     'update:zipCode',

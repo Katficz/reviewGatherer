@@ -13,6 +13,7 @@ export type PriceEvaluation =
 export interface PersonalData {
   name: string
   surname: string
+  pesel: number
   address: string
   city: string
   zipCode: string // I assume zip codes are PL only, so the format is XX-XXX
@@ -36,6 +37,7 @@ export const emptyReview = (): Review => ({
   personalData: {
     name: '',
     surname: '',
+    pesel: NaN,
     address: '',
     city: '',
     zipCode: '',
