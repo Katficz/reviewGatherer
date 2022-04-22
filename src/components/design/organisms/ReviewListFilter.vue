@@ -33,6 +33,7 @@ import { defineComponent, ref, Ref } from 'vue'
 import { IonItem, IonInput, IonLabel } from '@ionic/vue'
 import ListItemCollapsible from '../molecules/ListItemCollapsible.vue'
 import AcceptRejectButtons from '../molecules/AcceptRejectButtons.vue'
+import { presentAlertOk } from '@/hooks/ionicAlerts'
 
 export default defineComponent({
   name: 'ReviewListFilter',
@@ -56,8 +57,14 @@ export default defineComponent({
     })
 
     function emitFilter() {
-      if (!filter.value.pesel && !filter.value.toString().match(/^[0-9]{11}$/g))
-        emit('filterChange', filter.value)
+      if (
+        filter.value.pesel &&
+        !filter.value.pesel.toString().match(/^[0-9]{11}$/g)
+      ) {
+        presentAlertOk('Niepoprawny numer PESEL')
+        return
+      }
+      emit('filterChange', filter.value)
     }
 
     function clearFilter() {

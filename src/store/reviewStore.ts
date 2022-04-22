@@ -108,9 +108,11 @@ export const useReviewStore = defineStore('ReviewStore', {
       surname: string
       pesel: number | undefined
     }) {
-      const reviewList: Review[] = await fetchGet(
-        `getListUrl?name=${filter.name}&surname=${filter.surname}&pesel=${filter.pesel}`
-      )
+      let query = '?'
+      if (filter.name) query += `name=${filter.name}&`
+      if (filter.surname) query += `surname=${filter.surname}&`
+      if (filter.pesel) query += `pesel=${filter.pesel}`
+      const reviewList: Review[] = await fetchGet(`getListUrl${query}`)
       this.reviewList = reviewList
     },
   },
