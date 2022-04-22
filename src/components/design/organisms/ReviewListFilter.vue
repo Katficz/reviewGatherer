@@ -29,10 +29,13 @@
 </template>
 
 <script lang="ts">
+//vue and ionic
 import { defineComponent, ref, Ref } from 'vue'
 import { IonItem, IonInput, IonLabel } from '@ionic/vue'
+//comps
 import ListItemCollapsible from '../molecules/ListItemCollapsible.vue'
 import AcceptRejectButtons from '../molecules/AcceptRejectButtons.vue'
+//misc
 import { presentAlertOk } from '@/hooks/ionicAlerts'
 
 export default defineComponent({

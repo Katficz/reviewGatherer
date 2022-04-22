@@ -10,7 +10,11 @@
       :id="review.id"
       card
       button
-      :sideText="String(review.personalData.pesel)"
+      :sideText="
+        !!review?.personalData.pesel
+          ? String(review?.personalData.pesel)
+          : 'Brak PESELu'
+      "
     >
       <template v-slot:mainText
         ><h2>{{ review.personalData.name }}</h2></template
@@ -33,11 +37,14 @@
 </template>
 
 <script lang="ts">
-import { Review } from '@/store/reviewStore'
-import { IonItemDivider, IonModal, IonContent, IonButton } from '@ionic/vue'
+//vue and ionic
 import { defineComponent, PropType, ref } from 'vue'
+import { IonItemDivider, IonModal, IonContent, IonButton } from '@ionic/vue'
+//comps
 import ReviewDetailsPreview from '@/components/design/organisms/ReviewDetailsPreview.vue'
 import ListItem from '../molecules/ListItem.vue'
+//store
+import { Review } from '@/store/reviewStore'
 
 export default defineComponent({
   components: {

@@ -23,7 +23,13 @@
         <td>
           <b>Pesel</b>
         </td>
-        <td>{{ review?.personalData.pesel }}</td>
+        <td>
+          {{
+            !!review?.personalData.pesel
+              ? review?.personalData.pesel
+              : 'Brak PESELu'
+          }}
+        </td>
       </tr>
       <tr>
         <td>
@@ -101,8 +107,10 @@
 </template>
 
 <script lang="ts">
-import { Review } from '@/store/reviewStore'
+//vue
 import { defineComponent, PropType } from 'vue'
+//store
+import { Review } from '@/store/reviewStore'
 
 export default defineComponent({
   name: 'ReviewDetailsPreview',

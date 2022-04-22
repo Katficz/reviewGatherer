@@ -5,6 +5,7 @@ export function validatePersonalInfo(personalData: PersonalData) {
   //using patterns here instead of ion inputs, coz ion inputs sometimes
   //were acting kinda weird
   //return string if validation is not succesful
+  console.log(personalData.pesel)
   if (!personalData.zipCode.match(/[0-9]{2}-[0-9]{3}/g))
     return 'Niepoprawny kod pocztowy! Podaj kod w formacie XX-XXX' // match regex for xx-xxx
   if (
@@ -13,7 +14,7 @@ export function validatePersonalInfo(personalData: PersonalData) {
   )
     return 'Niepoprawny numer telefonu!'
   if (
-    !isNaN(personalData.pesel) &&
+    personalData.pesel != 0 &&
     !personalData.pesel.toString().match(/^[0-9]{11}$/g)
   )
     return 'Numer PESEL nieprawidłowy'

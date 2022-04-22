@@ -66,8 +66,10 @@
 </template>
 
 <script lang="ts">
+//vue and ionic
 import { defineComponent } from 'vue'
 import { IonItem, IonLabel, IonInput } from '@ionic/vue'
+//comps
 import ListItemCollapsible from '@/components/design/molecules/ListItemCollapsible.vue'
 
 export default defineComponent({

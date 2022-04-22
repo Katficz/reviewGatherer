@@ -38,7 +38,6 @@
 </template>
 
 <script lang="ts">
-//use section in template to place things under each other, and ion-labels for 1 row
 import { computed, defineComponent, ref } from 'vue'
 import {
   IonLabel,

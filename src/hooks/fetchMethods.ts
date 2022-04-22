@@ -107,7 +107,6 @@ export const fetchGet = async function (url: string) {
   const reviewList = await new Promise((resolve, reject) => {
     useMiscStore().setLoading(true)
     setTimeout(async () => {
-      console.log(url)
       resolve(dummyReviewList)
       const toastSucc = await showLoadingToast({
         message: 'Operacja zakończona sukcesem!',

@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts">
+//vue and ionic
 import { defineComponent, PropType } from 'vue'
 import {
   IonItem,
@@ -67,7 +68,9 @@ import {
   IonSelectOption,
   IonTextarea,
 } from '@ionic/vue'
+//comps
 import ListItemCollapsible from '@/components/design/molecules/ListItemCollapsible.vue'
+//store
 import { PriceEvaluation } from '@/store/reviewStore'
 
 export default defineComponent({

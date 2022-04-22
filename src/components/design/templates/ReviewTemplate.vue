@@ -62,6 +62,7 @@ export default defineComponent({
         return
       }
       emit('saveNewReview', newReview.value)
+      newReview.value = emptyReview()
     }
 
     async function clearReview() {

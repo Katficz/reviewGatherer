@@ -13,6 +13,7 @@ import BasePage from '@/components/base/BasePage.vue'
 import ReviewTemplate from '@/components/design/templates/ReviewTemplate.vue'
 //store
 import { Review, useReviewStore } from '@/store/reviewStore'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'NewReviewPage',
@@ -22,8 +23,10 @@ export default defineComponent({
   },
   setup() {
     const reviewStore = useReviewStore()
-    function saveNewReview(review: Review) {
-      reviewStore.saveNewReview(review)
+    const router = useRouter()
+    async function saveNewReview(review: Review) {
+      await reviewStore.saveNewReview(review)
+      router.push('/reviewList')
     }
     return {
       saveNewReview,

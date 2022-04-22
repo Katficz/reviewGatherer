@@ -37,7 +37,7 @@ export const emptyReview = (): Review => ({
   personalData: {
     name: '',
     surname: '',
-    pesel: NaN,
+    pesel: 0,
     address: '',
     city: '',
     zipCode: '',
