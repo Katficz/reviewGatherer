@@ -6,11 +6,15 @@ export function validatePersonalInfo(personalData: PersonalData) {
   //were acting kinda weird
   //return string if validation is not succesful
   console.log(personalData.pesel)
-  if (!personalData.zipCode.match(/[0-9]{2}-[0-9]{3}/g))
+  if (
+    !personalData.zipCode.match(/[0-9]{2}-[0-9]{3}/g) &&
+    personalData.zipCode != ''
+  )
     return 'Niepoprawny kod pocztowy! Podaj kod w formacie XX-XXX' // match regex for xx-xxx
   if (
-    !isPossiblePhoneNumber(personalData.phoneNum, 'PL') ||
-    !isValidPhoneNumber(personalData.phoneNum, 'PL')
+    (!isPossiblePhoneNumber(personalData.phoneNum, 'PL') ||
+      !isValidPhoneNumber(personalData.phoneNum, 'PL')) &&
+    personalData.phoneNum != ''
   )
     return 'Niepoprawny numer telefonu!'
   if (
