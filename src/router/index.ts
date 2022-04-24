@@ -16,10 +16,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Dodaj ankietę',
     component: () => import('../views/NewReviewPage.vue'),
   },
-  {
-    path: '/reviewDetails/:id',
-    component: () => import('../views/ReviewListPage.vue'),
-  },
 ]
 
 const router = createRouter({

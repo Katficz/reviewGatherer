@@ -19,13 +19,14 @@
               :key="i"
             >
               <ion-item
-                @click="selectedIndex = i"
                 router-direction="root"
                 :router-link="p.url"
                 lines="none"
                 detail="false"
                 class="hydrated"
-                :class="{ selected: selectedIndex === i }"
+                :class="{
+                  selected: p.aliases.includes(String($route.name)),
+                }"
               >
                 <ion-icon
                   slot="start"
@@ -60,8 +61,7 @@ import {
   IonTitle,
   IonButton,
 } from '@ionic/vue'
-import { computed, defineComponent, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, defineComponent } from 'vue'
 import { listOutline, addOutline } from 'ionicons/icons'
 import { Network } from '@capacitor/network'
 import { saveStoredReviews } from './hooks/localStorageManagment'
@@ -86,7 +86,6 @@ export default defineComponent({
     IonButton,
   },
   setup() {
-    const selectedIndex = ref(0)
     Network.addListener('networkStatusChange', async (status) => {
       if (!status.connected) return
       await saveStoredReviews()
@@ -99,33 +98,24 @@ export default defineComponent({
       {
         title: 'Lista ankiet',
         url: '/reviewList',
+        aliases: ['Lista ankiet'],
         iosIcon: listOutline,
         mdIcon: listOutline,
       },
       {
         title: 'Dodaj ankietę',
         url: '/addReview',
+        aliases: ['Dodaj ankietę'],
         iosIcon: addOutline,
         mdIcon: addOutline,
       },
     ]
     const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders']
 
-    const path = window.location.pathname.split('folder/')[1]
-    if (path !== undefined) {
-      selectedIndex.value = appPages.findIndex(
-        (page) => page.title.toLowerCase() === path.toLowerCase()
-      )
-    }
-
-    const route = useRoute()
-
     return {
-      selectedIndex,
       appPages,
       labels,
       unsavedDataExists: computed(() => useMiscStore().getIsUnsavedData),
-      isSelected: (url: string) => (url === route.path ? 'selected' : ''),
       saveStoredData,
     }
   },
