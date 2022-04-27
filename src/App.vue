@@ -94,18 +94,11 @@ export default defineComponent({
         await saveStoredReviews()
       })
     }
-    window.addEventListener('offline', function (e) {
-      console.log('offline, windows listener')
-    })
-
-    window.addEventListener('online', function (e) {
-      console.log('online, window listener')
-    })
 
     if (navigator.connection && usedPlatform == 'web') {
       // check if browser supports navigator.connection
       Object.assign(navigator.connection, {
-        onchange: async (x: any) => {
+        onchange: async () => {
           // console.log(navigator.connection)
           // console.log(navigator.onLine)
           // as there is no better way to detect if we can reach backend or not then sending request there,

@@ -1,7 +1,7 @@
 import { ToastOptions } from '@ionic/vue'
 import { showLoadingToast } from './notifications'
 import { useMiscStore } from '../store/misc'
-import { Review } from '@/store/reviewStore'
+// import { Review } from '@/store/reviewStore'
 
 /*
 /// I WOULD USE THESE METHODS IN REAL WORLD SCENARIO
@@ -33,6 +33,7 @@ export const fetchPost = async (
     body: JSON.stringify(data),
   }).catch(async function (err: any): Promise<any> {
     //catches http errors
+    console.log(err)
     console.log('Cannot reach backend/no internet connection')
     const toastConnectionError = await showLoadingToast(rejectToastOptions)
     toastConnectionError.removeAttribute('tabindex')
