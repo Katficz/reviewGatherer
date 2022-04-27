@@ -60,15 +60,15 @@ import {
   IonHeader,
   IonTitle,
   IonButton,
-} from '@ionic/vue'
-import { computed, defineComponent } from 'vue'
-import { listOutline, addOutline } from 'ionicons/icons'
-import { Network } from '@capacitor/network'
-import { saveStoredReviews } from './hooks/localStorageManagment'
-import { useMiscStore } from './store/misc'
+} from "@ionic/vue"
+import { computed, defineComponent } from "vue"
+import { listOutline, addOutline } from "ionicons/icons"
+import { Network } from "@capacitor/network"
+import { saveStoredReviews } from "./hooks/localStorageManagment"
+import { useMiscStore } from "./store/misc"
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
     IonApp,
     IonHeader,
@@ -86,31 +86,54 @@ export default defineComponent({
     IonButton,
   },
   setup() {
-    Network.addListener('networkStatusChange', async (status) => {
+    Network.addListener("networkStatusChange", async (status) => {
       if (!status.connected) return
       await saveStoredReviews()
     })
+    window.addEventListener("offline", function (e) {
+      console.log("offline, windows listener")
+    })
+
+    window.addEventListener("online", function (e) {
+      console.log("online, window listener")
+    })
+    
+    if (navigator.connection) {
+      Object.assign(navigator.connection, {
+        onchange: (x:any) => {
+          setTimeout(() => {
+            console.log(navigator.connection)
+          console.log(navigator.onLine)
+          }, 1000);
+          console.log(navigator.connection)
+          console.log(navigator.onLine)
+        },
+      })
+    }
+
     useMiscStore().checkUnsavedDataExists()
     async function saveStoredData() {
       await saveStoredReviews()
     }
     const appPages = [
       {
-        title: 'Lista ankiet',
-        url: '/reviewList',
-        aliases: ['Lista ankiet'],
+        title: "Lista ankiet",
+        url: "/reviewList",
+        aliases: ["Lista ankiet"],
         iosIcon: listOutline,
         mdIcon: listOutline,
       },
       {
-        title: 'Dodaj ankietę',
-        url: '/addReview',
-        aliases: ['Dodaj ankietę'],
+        title: "Dodaj ankietę",
+        url: "/addReview",
+        aliases: ["Dodaj ankietę"],
         iosIcon: addOutline,
         mdIcon: addOutline,
       },
     ]
-    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders']
+    const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"]
+
+
 
     return {
       appPages,
