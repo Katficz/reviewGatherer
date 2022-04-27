@@ -3,6 +3,7 @@ import { Review } from '@/store/reviewStore'
 import { Network } from '@capacitor/network'
 import { Storage } from '@capacitor/storage'
 import { fetchPost } from './fetchMethods'
+import { showLoadingToast } from './notifications'
 
 export async function storeNewReview(review: Review) {
   let reviewsToBeStored = []
@@ -17,7 +18,6 @@ export async function storeNewReview(review: Review) {
     key: 'storedReviews',
     value: jsonReviewsToStore,
   })
-  console.log(jsonReviewsToStore)
   await useMiscStore().checkUnsavedDataExists()
 }
 
@@ -31,9 +31,16 @@ export async function saveStoredReviews() {
       storedReviewsParsed
     )
     //THIS WOULD NEED BETTER ERROR HANDLING HERE
-    if (!response) return false
+    if (response === false || response instanceof Error) return false
     await Storage.remove({ key: 'storedReviews' })
     await useMiscStore().checkUnsavedDataExists()
+    const toastStoreReviewsSaved = await showLoadingToast({
+      message: `Przywrócono połączenie z internete i zapisano zapisane ankiety`,
+      duration: 2500,
+      color: 'success',
+    })
+    toastStoreReviewsSaved.removeAttribute('tabindex')
+    toastStoreReviewsSaved.present()
     return true
   } else return false
 }

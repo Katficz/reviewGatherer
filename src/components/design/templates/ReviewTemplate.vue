@@ -21,6 +21,8 @@
       >
       </questions-form>
       <accept-reject-buttons
+        rejectTitle="Wyczyść pola"
+        rejectColor="warning"
         type="submit"
         @rejected="clearReview"
       ></accept-reject-buttons>
@@ -62,7 +64,6 @@ export default defineComponent({
         return
       }
       emit('saveNewReview', newReview.value)
-      newReview.value = emptyReview()
     }
 
     async function clearReview() {

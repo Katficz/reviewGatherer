@@ -25,7 +25,8 @@ export default defineComponent({
     const reviewStore = useReviewStore()
     const router = useRouter()
     async function saveNewReview(review: Review) {
-      await reviewStore.saveNewReview(review)
+      const isSavedProperly = await reviewStore.saveNewReview(review)
+      if (!isSavedProperly) return
       router.push('/reviewList')
     }
     return {

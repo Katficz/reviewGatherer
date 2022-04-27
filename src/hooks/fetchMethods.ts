@@ -8,6 +8,8 @@ import { Review } from '@/store/reviewStore'
 */
 
 export const fetchPost = async (
+  // returns false for bad connection/unreachable backedn
+  //and error instance if backend error
   backendUrl: string,
   data: any,
   resolveToastOptions: ToastOptions = {
@@ -22,7 +24,7 @@ export const fetchPost = async (
   }
 ): Promise<any> => {
   useMiscStore().setLoading(true)
-  const response = await fetch('www.google.pl', {
+  const response = await fetch('https://www.google.pl', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -30,21 +32,25 @@ export const fetchPost = async (
     },
     body: JSON.stringify(data),
   }).catch(async function (err: any): Promise<any> {
-    console.log(err)
-    const error = new Error('Backend unreachable: ' + err)
+    //catches http errors
+    console.log('Cannot reach backend/no internet connection')
     const toastConnectionError = await showLoadingToast(rejectToastOptions)
     toastConnectionError.removeAttribute('tabindex')
     toastConnectionError.present()
-    return error
+    return false
   })
   useMiscStore().setLoading(false)
+  if (response === false) return false // if backend is unreachable or
+  //we do not have internet we will get false
+  //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   const responseData = await response.json()
   if (!response.ok) {
+    // backend error will send full http response with .ok property
     rejectToastOptions.message = responseData
     const toastErr = await showLoadingToast(rejectToastOptions)
     toastErr.removeAttribute('tabindex')
     toastErr.present()
-    return responseData
+    return new Error(responseData)
   }
   const toastSucc = await showLoadingToast(resolveToastOptions)
   toastSucc.removeAttribute('tabindex')
@@ -54,7 +60,7 @@ export const fetchPost = async (
 
 export const fetchGet = async (backendUrl: string): Promise<any> => {
   useMiscStore().setLoading(true)
-  const response = await fetch(backendUrl).catch(async function (
+  const response = await fetch('https://www.google.pl').catch(async function (
     err: any
   ): Promise<any> {
     const error = new Error('Backend unreachable: ' + err)
@@ -68,10 +74,19 @@ export const fetchGet = async (backendUrl: string): Promise<any> => {
     return error
   })
   useMiscStore().setLoading(false)
+  if (response instanceof Error) return false
   const responseData = await response.json()
   if (!response.ok) {
+    const toastBackendError = await showLoadingToast({
+      message: `Serwer zwrócił błąd ${responseData}`,
+      duration: 2500,
+      color: 'danger',
+    })
+    toastBackendError.removeAttribute('tabindex')
+    toastBackendError.present()
+
     const error = new Error(responseData.message || 'Failed to Fetch!')
-    throw error
+    return error
   }
   return responseData
 }

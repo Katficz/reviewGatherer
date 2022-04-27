@@ -73,35 +73,51 @@ export const useReviewStore = defineStore('ReviewStore', {
     },
   },
   actions: {
-    async saveNewReview(review: Review) {
+    async saveNewReview(review: Review): Promise<boolean> {
       if (Capacitor.getPlatform() == 'web') {
         // in browser capacitorNetwork is not working well
         const response = await fetchPost('backendUrlToSaveOne', review)
-        if (!response) {
+        if (response instanceof Error) {
+          // error with backend - we dont want to store that one
+          await presentAlertOk(
+            'Whoops! Błąd bazy danych!.',
+            'Serwer zwrócił błąd - ' + response.message
+          )
+          return false
+        }
+        if (response === false) {
           await presentAlertOk(
             'Whoops! Brak połączenia z internetem.',
             'Ankieta została zapisana w pamięci przeglądarki. Pobierz aplikację na telefon, by móc pracować bez ryzyka utraty danych.'
           )
           await storeNewReview(review)
-          return
+          return true
         }
         this.$state.reviewList.push(review)
-        return
+        return true
       }
+
       //app on android/ios
       const isConnected = await Network.getStatus()
-
       if (!isConnected.connected) {
         await presentAlertOk(
           'Whoops! Brak połączenia z internetem.',
           'Ankieta zostanie przechowana w pamięci i zostanie wysłana gdy ponownie połączysz się z internetem!'
         )
         await storeNewReview(review)
-        return
+        return true
       }
       const response = await fetchPost('backendUrlToSaveOne', review)
-      if (!response) return
+      if (response instanceof Error) {
+        // error with backend - we dont want to store that one
+        await presentAlertOk(
+          'Whoops! Błąd bazy danych!.',
+          'Serwer zwrócił błąd - ' + response.message
+        )
+        return false
+      }
       this.$state.reviewList.push(review)
+      return true
     },
     async loadReviewList(filter: {
       name: string
@@ -112,7 +128,19 @@ export const useReviewStore = defineStore('ReviewStore', {
       if (filter.name) query += `name=${filter.name}&`
       if (filter.surname) query += `surname=${filter.surname}&`
       if (filter.pesel) query += `pesel=${filter.pesel}`
-      const reviewList: Review[] = await fetchGet(`getListUrl${query}`)
+      const reviewList: Review[] | false = await fetchGet(`getListUrl${query}`)
+
+      if (reviewList === false) {
+        this.reviewList = []
+        return
+      }
+      if (reviewList instanceof Error) {
+        await presentAlertOk(
+          'Whoops! Błąd bazy danych!.',
+          'Serwer zwrócił błąd - ' + reviewList.message
+        )
+        return false
+      }
       this.reviewList = reviewList
     },
   },

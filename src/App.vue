@@ -60,15 +60,16 @@ import {
   IonHeader,
   IonTitle,
   IonButton,
-} from "@ionic/vue"
-import { computed, defineComponent } from "vue"
-import { listOutline, addOutline } from "ionicons/icons"
-import { Network } from "@capacitor/network"
-import { saveStoredReviews } from "./hooks/localStorageManagment"
-import { useMiscStore } from "./store/misc"
+} from '@ionic/vue'
+import { computed, defineComponent } from 'vue'
+import { listOutline, addOutline } from 'ionicons/icons'
+import { Network } from '@capacitor/network'
+import { saveStoredReviews } from './hooks/localStorageManagment'
+import { useMiscStore } from './store/misc'
+import { Capacitor } from '@capacitor/core'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: {
     IonApp,
     IonHeader,
@@ -86,27 +87,31 @@ export default defineComponent({
     IonButton,
   },
   setup() {
-    Network.addListener("networkStatusChange", async (status) => {
-      if (!status.connected) return
-      await saveStoredReviews()
-    })
-    window.addEventListener("offline", function (e) {
-      console.log("offline, windows listener")
+    const usedPlatform = Capacitor.getPlatform()
+    if (usedPlatform == 'ios' || usedPlatform == 'android') {
+      Network.addListener('networkStatusChange', async (status) => {
+        if (!status.connected) return
+        await saveStoredReviews()
+      })
+    }
+    window.addEventListener('offline', function (e) {
+      console.log('offline, windows listener')
     })
 
-    window.addEventListener("online", function (e) {
-      console.log("online, window listener")
+    window.addEventListener('online', function (e) {
+      console.log('online, window listener')
     })
-    
-    if (navigator.connection) {
+
+    if (navigator.connection && usedPlatform == 'web') {
+      // check if browser supports navigator.connection
       Object.assign(navigator.connection, {
-        onchange: (x:any) => {
-          setTimeout(() => {
-            console.log(navigator.connection)
-          console.log(navigator.onLine)
-          }, 1000);
-          console.log(navigator.connection)
-          console.log(navigator.onLine)
+        onchange: async (x: any) => {
+          // console.log(navigator.connection)
+          // console.log(navigator.onLine)
+          // as there is no better way to detect if we can reach backend or not then sending request there,
+          // it may be a good idea to do it on every network connection change as there can be moments
+          // where we for example swap from closed wifi to an open internet
+          await saveStoredReviews()
         },
       })
     }
@@ -117,23 +122,21 @@ export default defineComponent({
     }
     const appPages = [
       {
-        title: "Lista ankiet",
-        url: "/reviewList",
-        aliases: ["Lista ankiet"],
+        title: 'Lista ankiet',
+        url: '/reviewList',
+        aliases: ['Lista ankiet'],
         iosIcon: listOutline,
         mdIcon: listOutline,
       },
       {
-        title: "Dodaj ankietę",
-        url: "/addReview",
-        aliases: ["Dodaj ankietę"],
+        title: 'Dodaj ankietę',
+        url: '/addReview',
+        aliases: ['Dodaj ankietę'],
         iosIcon: addOutline,
         mdIcon: addOutline,
       },
     ]
-    const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"]
-
-
+    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders']
 
     return {
       appPages,
