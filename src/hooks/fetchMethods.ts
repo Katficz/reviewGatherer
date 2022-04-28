@@ -135,6 +135,7 @@ export const fetchGet = async function (
       toastSucc.removeAttribute('tabindex')
       toastSucc.present()
       useMiscStore().setLoading(false)
+      console.log(simulationSetting)
       if (simulationSetting == 'backendError') reject(Error('Błąd backendu'))
       if (simulationSetting == 'ok') resolve(dummyReviewList)
       if (simulationSetting == 'noInternet') resolve(false)

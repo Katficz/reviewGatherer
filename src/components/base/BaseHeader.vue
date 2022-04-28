@@ -55,7 +55,9 @@ export default defineComponent({
     IonToolbar,
   },
   setup() {
-    const simulationSetting: Ref<SimulationSetting> = ref('ok')
+    const simulationSetting: Ref<SimulationSetting> = ref(
+      useMiscStore().getSimulationSetting
+    )
     function updateSimulationSetting() {
       console.log(simulationSetting.value)
       useMiscStore().setSimulationSetting(simulationSetting.value)

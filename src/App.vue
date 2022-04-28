@@ -94,7 +94,6 @@ export default defineComponent({
         await saveStoredReviews()
       })
     }
-
     if (navigator.connection && usedPlatform == 'web') {
       // check if browser supports navigator.connection
       Object.assign(navigator.connection, {
@@ -104,6 +103,7 @@ export default defineComponent({
           // as there is no better way to detect if we can reach backend or not then sending request there,
           // it may be a good idea to do it on every network connection change as there can be moments
           // where we for example swap from closed wifi to an open internet
+          console.log('change detected')
           await saveStoredReviews()
         },
       })

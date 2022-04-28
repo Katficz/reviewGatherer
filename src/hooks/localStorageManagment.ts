@@ -13,7 +13,6 @@ export async function storeNewReview(review: Review) {
     reviewsToBeStored = [...storedReviewsParsed, review]
   } else reviewsToBeStored = [review]
   const jsonReviewsToStore = JSON.stringify(reviewsToBeStored)
-  console.log(reviewsToBeStored)
   await Storage.set({
     key: 'storedReviews',
     value: jsonReviewsToStore,
@@ -30,7 +29,6 @@ export async function saveStoredReviews() {
       'backendUrlToSaveMultiple',
       storedReviewsParsed
     )
-    //THIS WOULD NEED BETTER ERROR HANDLING HERE
     if (response === false || response instanceof Error) return false
     await Storage.remove({ key: 'storedReviews' })
     await useMiscStore().checkUnsavedDataExists()
