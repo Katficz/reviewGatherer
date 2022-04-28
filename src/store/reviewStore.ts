@@ -134,10 +134,20 @@ export const useReviewStore = defineStore('ReviewStore', {
       if (filter.name) query += `name=${filter.name}&`
       if (filter.surname) query += `surname=${filter.surname}&`
       if (filter.pesel) query += `pesel=${filter.pesel}`
-      const reviewList: Review[] | false = await fetchGet(`getListUrl${query}`)
+      const reviewList: Review[] | false | Error = await fetchGet(
+        `getListUrl${query}`
+      )
+      console.log(reviewList)
+      if (reviewList instanceof Error) {
+        await presentAlertOk(
+          'Whoops! Błąd bazy danych!.',
+          'Serwer zwrócił błąd - ' + reviewList.message
+        )
+        return false
+      }
 
       if (reviewList === false) {
-        this.reviewList = []
+        presentAlertOk('Brak połączenia z internetem :/')
         return
       }
       if (reviewList instanceof Error) {
