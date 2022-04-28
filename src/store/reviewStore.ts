@@ -2,7 +2,10 @@ import { fetchGet, fetchPost } from '@/hooks/fetchMethods'
 import { defineStore } from 'pinia'
 import { Network } from '@capacitor/network'
 import { presentAlertOk } from '@/hooks/ionicAlerts'
-import { storeNewReview } from '@/hooks/localStorageManagment'
+import {
+  saveStoredReviews,
+  storeNewReview,
+} from '@/hooks/localStorageManagment'
 import { Capacitor } from '@capacitor/core'
 
 export type PriceEvaluation =
@@ -94,6 +97,7 @@ export const useReviewStore = defineStore('ReviewStore', {
           return true
         }
         this.$state.reviewList.push(review)
+        await saveStoredReviews()
         return true
       }
 
@@ -117,6 +121,8 @@ export const useReviewStore = defineStore('ReviewStore', {
         return false
       }
       this.$state.reviewList.push(review)
+      await saveStoredReviews()
+
       return true
     },
     async loadReviewList(filter: {

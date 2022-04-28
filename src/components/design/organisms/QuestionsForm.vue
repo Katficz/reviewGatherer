@@ -5,11 +5,11 @@
       <ion-item>
         <ion-label>Data ostatniego spożycia produktu</ion-label>
         <input
+          required
           class="datetime"
           :value="new Date(lastConsumption).toISOString().slice(0, 10)"
           @change="emitDateChange($event.target as HTMLInputElement)"
           type="date"
-          required
         />
       </ion-item>
       <ion-item>
@@ -17,6 +17,7 @@
           >Jak często spożywasz produkty?</ion-label
         >
         <ion-input
+          required
           :value="consumptionFrequency"
           @input="$emit('update:consumptionFrequency', $event.target.value)"
         ></ion-input>
@@ -47,6 +48,7 @@
       <ion-item>
         <ion-label position="floating">Co zmieniłbyś z ofecie firmy?</ion-label>
         <ion-textarea
+          required
           type="tel"
           :value="changeSuggestions"
           @input="$emit('update:changeSuggestions', $event.target.value)"

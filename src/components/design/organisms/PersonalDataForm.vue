@@ -13,6 +13,7 @@
       <ion-item>
         <ion-label position="floating">Nazwisko</ion-label>
         <ion-input
+          required
           :value="surname"
           @input="$emit('update:surname', $event.target.value)"
         ></ion-input>
@@ -20,6 +21,7 @@
       <ion-item>
         <ion-label position="floating">Pesel</ion-label>
         <ion-input
+          required
           pattern="/^[0-9]{11}$/g"
           inputmode="numeric"
           type="number"
@@ -32,6 +34,7 @@
           >Adres - ulica oraz numer domu/mieszkania</ion-label
         >
         <ion-input
+          required
           :value="address"
           @input="$emit('update:address', $event.target.value)"
         ></ion-input>
@@ -39,6 +42,7 @@
       <ion-item>
         <ion-label position="floating">Miasto</ion-label>
         <ion-input
+          required
           :value="city"
           @input="$emit('update:city', $event.target.value)"
         ></ion-input>
@@ -46,6 +50,7 @@
       <ion-item>
         <ion-label position="floating">Kod pocztowy</ion-label>
         <ion-input
+          required
           inputmode="tel"
           type="tel"
           :value="zipCode"
@@ -55,6 +60,7 @@
       <ion-item>
         <ion-label position="floating">Numer telefonu</ion-label>
         <ion-input
+          required
           inputmode="tel"
           type="tel"
           :value="phoneNum"
