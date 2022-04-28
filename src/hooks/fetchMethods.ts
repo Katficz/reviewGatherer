@@ -102,7 +102,7 @@ export const fetchPost = async function (url: string, data: any) {
       const toastSucc = await showLoadingToast({
         message: 'Operacja zakończona sukcesem!',
         duration: 2500,
-        color: 'success',
+        color: simulationSetting == 'ok' ? 'success' : 'warning',
         // color: 'danger',
       })
       toastSucc.removeAttribute('tabindex')
@@ -130,7 +130,7 @@ export const fetchGet = async function (
       const toastSucc = await showLoadingToast({
         message: 'Operacja zakończona sukcesem!',
         duration: 2500,
-        color: 'success',
+        color: simulationSetting == 'ok' ? 'success' : 'warning',
       })
       toastSucc.removeAttribute('tabindex')
       toastSucc.present()
